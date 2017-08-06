@@ -72,9 +72,27 @@ fig=plt.figure(0)
 figuretitle='PieChart_'+outfilename
 fig.canvas.set_window_title(figuretitle)
 
-# write a pie chart
-plt.pie(data, counterclock=False, labels=label, startangle=90,autopct="%1.1f%%")
+# select pure circle
 plt.axis('equal')
+
+# write a pie chart
+# show % number if over 2% others are not
+SHOWDATA_LIMIT=2.0   # 2%
+(l_, texts, autoexts) = plt.pie(data, 
+    labels=label,
+    counterclock=False, startangle=90,  # start from 12 Oclock
+    autopct=lambda p: '{:.1f}%'.format(p) if p >= SHOWDATA_LIMIT else ''
+    )
+
+# change lagend label
+l = plt.legend(loc='upper left', bbox_to_anchor=(0.75 , 0.5) ) 
+i= 0
+for t in l.texts:
+    print t.get_text()
+    llabel = label[i] + ' ' + data[i]+'% '
+    i = i + 1
+    t.set_text(llabel)
+
 # put a title 
 plt.title(title)
 
